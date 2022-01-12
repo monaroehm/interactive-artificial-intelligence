@@ -25,6 +25,10 @@ public class SimpleReflexAgent : AgentController<MsPacMan>
 
 	public override void OnDecisionRequired()
     {
+        var potentialDirections = map.maze.PossibleMoves(agent.currentTile);
+
+        agent.Move(potentialDirections[0]);
+       
        // throw new System.NotImplementedException();
     }
 

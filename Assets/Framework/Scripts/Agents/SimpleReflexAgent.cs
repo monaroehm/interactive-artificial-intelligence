@@ -27,13 +27,53 @@ public class SimpleReflexAgent : AgentController<MsPacMan>
     {
         var potentialDirections = map.maze.PossibleMoves(agent.currentTile);
 
-        agent.Move(potentialDirections[0]);
-       
-       // throw new System.NotImplementedException();
+        System.Random random = new System.Random();
+
+        Direction currentBestDirection = Direction.NONE;
+        int currentBestDirectionScore = 0;
+
+        foreach (Direction direction in potentialDirections)
+        {
+            var perception = eyes.Look(direction);
+            int directionScore;
+
+            if(perception.type == PerceptType.GHOST)
+            {
+                directionScore = -1000 + perception.distance;
+            }
+            else if (perception.type == PerceptType.ITEM)
+            {
+                directionScore = 1000 - perception.distance;
+            }
+            else
+            {
+                directionScore = 0;
+            }
+            
+            if(directionScore > currentBestDirectionScore)
+            {
+                currentBestDirectionScore = directionScore;
+                currentBestDirection = direction;
+            }
+            else if(directionScore == currentBestDirectionScore)
+            {
+                if(currentBestDirection == Direction.NONE)
+                    currentBestDirection = direction;
+                else if(random.Next(0,2) != 0)
+                {
+                    currentBestDirection = direction;
+                }
+            }
+        }
+
+        agent.Move(currentBestDirection);
     }
 
     public override void OnTileReached()
     {
-       // throw new System.NotImplementedException();
+       var perception = eyes.Look(agent.currentMove);
+
+       if(perception.type == PerceptType.GHOST)
+            OnDecisionRequired();
     }
 }

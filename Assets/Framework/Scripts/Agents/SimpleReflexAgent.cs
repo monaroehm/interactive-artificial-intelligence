@@ -49,6 +49,9 @@ public class SimpleReflexAgent : AgentController<MsPacMan>
             {
                 directionScore = 0;
             }
+
+            if(direction == agent.currentMove.Opposite())
+                directionScore -= 1;
             
             if(directionScore > currentBestDirectionScore)
             {

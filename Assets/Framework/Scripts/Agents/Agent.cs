@@ -84,6 +84,11 @@ public abstract class Agent : MonoBehaviour
         return maze.IsTileWalkable(currentTile + newMove.ToVector2());
     }
 
+    public bool AreGhostsEdible()
+    {
+        return game.AreGhostsEdible();
+    }
+
     /// <summary>
     /// Immediately move to <paramref name="position"/> and reset the Moves.
     /// </summary>

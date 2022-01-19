@@ -13,6 +13,8 @@ public class Tile
         this.type = type;
     }
 
+    public double localSmellIntensity {get; set; }
+
 }
 
 public enum TileType

@@ -39,7 +39,10 @@ public class SimpleReflexAgent : AgentController<MsPacMan>
 
             if(perception.type == PerceptType.GHOST)
             {
-                directionScore = -1000 + perception.distance;
+                if(agent.AreGhostsEdible())
+                    directionScore = 2000 - perception.distance;
+                else
+                    directionScore = -1000 + perception.distance;
             }
             else if (perception.type == PerceptType.ITEM)
             {

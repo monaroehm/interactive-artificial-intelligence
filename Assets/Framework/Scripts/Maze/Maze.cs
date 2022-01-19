@@ -36,6 +36,46 @@ public class Maze : MonoBehaviour
 	char[,] mazeData;
 	Tile[,] tiles;
 
+	public double SniffTile(Vector2 tile)
+	{
+		return tiles[(int) tile.x, (int) tile.y].localSmellIntensity;
+	}
+
+	public void leaveSmellTrace(Vector2 tile)
+	{
+		if(GameData.CapSmellAtMaxIntensity)
+			tiles[(int) tile.x, (int) tile.y].localSmellIntensity = GameData.SmellIntensity;
+		else
+			tiles[(int) tile.x, (int) tile.y].localSmellIntensity += GameData.SmellIntensity;
+	}
+
+	public void Update()
+	{
+		SmellDecay(GameData.SmellDecayRate * Time.deltaTime);
+	}
+
+	public void SmellDecay(double decay)
+	{
+		foreach(Tile tile in tiles)
+		{
+			if(tile.localSmellIntensity > 0)
+			{
+				tile.localSmellIntensity -= decay;
+			}
+			if(tile.localSmellIntensity < 0)
+			{
+				tile.localSmellIntensity = 0;
+			}
+		}
+	}
+
+	public void ResetSmell(){
+		foreach(Tile tile in tiles)
+		{
+			tile.localSmellIntensity = 0;
+		}
+	}
+
 	/// <summary>
 	/// Checks if a tile  is walkable, meaning not a Wall.
 	/// </summary>

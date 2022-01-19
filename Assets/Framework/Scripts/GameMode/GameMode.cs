@@ -38,6 +38,8 @@ public abstract class GameMode : MonoBehaviour
 	protected Dictionary<PickupType, List<PickupItem>> pickupItemsEaten = new Dictionary<PickupType, List<PickupItem>>();
 
 
+	private bool GhostsAreEdible = false;
+
 	private void Awake()
 	{
 		GameData.Reset();
@@ -65,6 +67,7 @@ public abstract class GameMode : MonoBehaviour
 		ResetPickups();
 		ResetGhosts();
 		ResetPacMan();
+		maze.ResetSmell();
 	}
 
 	void InstantiatePlayer()
@@ -216,6 +219,10 @@ public abstract class GameMode : MonoBehaviour
 		return ghostsEdible[ghost.id];
 	}
 
+	public bool AreGhostsEdible(){
+		return GhostsAreEdible;
+	}
+
 	protected void SetGhostEdible(Ghost ghost, bool isEdible)
 	{
 		ghostsEdible[ghost.id] = isEdible;
@@ -223,6 +230,7 @@ public abstract class GameMode : MonoBehaviour
 
 	protected void SetGhostEdible(bool isEdible)
 	{
+		GhostsAreEdible = isEdible;
 		foreach (Ghost g in ghosts.Values)
 		{
 			SetGhostEdible(g, isEdible);

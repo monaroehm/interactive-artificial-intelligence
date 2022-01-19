@@ -9,6 +9,11 @@ public static class GameData
     public static int lives = 3;
     public static int level = 1;
 
+
+    public static double SmellIntensity = 200.0;
+    public static double SmellDecayRate = 0.05;
+    public static bool CapSmellAtMaxIntensity = true;
+
     public static void Reset()
     {
         score = 0;

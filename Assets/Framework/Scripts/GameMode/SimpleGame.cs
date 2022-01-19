@@ -22,6 +22,7 @@ public class SimpleGame : GameMode
     [SerializeField]
     int GhostsEdibleTime = 10;
 
+
     protected override void OnGhostEncounter(MsPacMan pacMan, Ghost ghost)
     {
         if (IsGhostEdible(ghost))

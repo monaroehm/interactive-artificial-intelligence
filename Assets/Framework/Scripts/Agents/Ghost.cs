@@ -12,6 +12,10 @@ public class Ghost : Agent
 {
     public GhostName id = GhostName.PINKY;
 
+    public bool IsEdible(){
+        return game.IsGhostEdible(this);
+    }
+
     protected override bool IsMoveValid(Direction move)
     { 
         // Do not turn around, except at dead ends

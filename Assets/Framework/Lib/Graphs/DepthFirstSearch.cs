@@ -3,15 +3,52 @@ using System.Collections.Generic;
 
 namespace Graphs
 {
-	public static class DepthFirstSearch
-	{
+    public static class DepthFirstSearch
+    {
 
-		public static bool Search<T>(Node<T> startNode,
-									 Func<Node<T>, bool> goalTest,
-									 out List<Node<T>> path)
-		{
-			path = new List<Node<T>>();
-			return false;
-		}
-	}
+        public static bool Search<T>(Node<T> startNode,
+                                     Func<Node<T>, bool> goalTest,
+                                     out List<Node<T>> path)
+        {
+            path = new List<Node<T>>();
+            // saves the parent node of a node, needed to construct the cheapest/fastest way to goal
+            Dictionary<Node<T>, Node<T>> cameFrom = new Dictionary<Node<T>, Node<T>>();
+            // LIFO
+            Stack<Node<T>> frontier = new Stack<Node<T>>();
+            frontier.Push(startNode);
+
+            while (frontier.Count > 0)
+            {
+                Node<T> current = frontier.Pop();
+                if (!cameFrom.ContainsKey(current))
+                {
+                    if (goalTest(current))
+                    {
+                        path = ReconstructPath(cameFrom, current);
+                        return true;
+                    }
+
+                    foreach (Node<T> child in current.Neighbors)
+                    {
+                        frontier.Push(child);
+                        cameFrom.Add(child, current);
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static List<Node<T>> ReconstructPath<T>(Dictionary<Node<T>, Node<T>> cameFrom, Node<T> current)
+        {
+            List<Node<T>> totalPath = new List<Node<T>>();
+            totalPath.Add(current);
+            while (cameFrom.ContainsKey(current))
+            {
+                current = cameFrom[current];
+                totalPath.Add(current);
+            }
+            return totalPath;
+        }
+    }
 }

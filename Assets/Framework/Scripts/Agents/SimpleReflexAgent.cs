@@ -77,9 +77,6 @@ public class SimpleReflexAgent : AgentController<MsPacMan>
 
     public override void OnTileReached()
     {
-       var perception = eyes.Look(agent.currentMove);
-
-       if(perception.type == PerceptType.GHOST)
-            OnDecisionRequired();
+        OnDecisionRequired();
     }
 }

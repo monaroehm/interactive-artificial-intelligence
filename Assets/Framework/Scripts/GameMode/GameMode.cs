@@ -48,7 +48,7 @@ public abstract class GameMode : MonoBehaviour
 		GameData.Reset();
 		maze.LoadMaze(mazeFile);
 		this.nodes = maze.initialNodes;
-		// connect nodes
+		ConnectNodes();
 	}
 
 	private void Start()
@@ -119,7 +119,6 @@ public abstract class GameMode : MonoBehaviour
 				}
 
 				pickupItems[type].Add(Instantiate(prefab, position, Quaternion.identity).GetComponent<PickupItem>());
-
 			}
 		}
 	}
@@ -130,27 +129,52 @@ public abstract class GameMode : MonoBehaviour
 		Instantiate(junction, maze.junctionTwo, Quaternion.identity).GetComponent<Junction>().teleportationTarget = maze.junctionTwo - Vector2.right * 26;
 	}
 
+	//iterate over array, connect all neighboring Nodes
 	private void ConnectNodes()
 	{
-		//iterate over array, connect all neighboring Nodes
-		for (int col = 0; col < nodes.GetLength(0); col++)
+		// columns
+		for (int y = 0; y < nodes.GetLength(1); y++)
 		{
-			for (int row = 0; row < nodes.GetLength(1); row++)
+			// rows
+			for (int x = 0; x < nodes.GetLength(0); x++)
 			{
-				if(nodes[row, col] != null)
+				if(nodes[x, y] != null)
                 {
-					Vector2 currentPos = new Vector2(col, row);
-					Node<GameTile> currentNode = nodes[col, row];
+					Vector2 currentPos = new Vector2(x, y);
+					Node<GameTile> currentNode = nodes[x, y];
 
-					if (maze.IsTileWalkable(currentPos + Vector2.up))
+					// connect node in up direction
+					if (y + 1 < nodes.GetLength(1) && maze.IsTileWalkable(currentPos + Vector2.up))
 					{
-						int newX = (int)currentPos.x + 0;
+						int newX = (int)currentPos.x;
 						int newY = (int)currentPos.y + 1;
 						currentNode.SetEdge(nodes[newX, newY], 1);
 					}
-					// TODO repeat for other directions
-					// out of bounds error
-                }
+
+					// connect node in down direction
+					if (y - 1 >= 0 && maze.IsTileWalkable(currentPos + Vector2.down))
+					{
+						int newX = (int)currentPos.x;
+						int newY = (int)currentPos.y - 1;
+						currentNode.SetEdge(nodes[newX, newY], 1);
+					}
+
+					// connect node in left direction
+					if (x - 1 >= 0 && maze.IsTileWalkable(currentPos + Vector2.left))
+					{
+						int newX = (int)currentPos.x - 1;
+						int newY = (int)currentPos.y;
+						currentNode.SetEdge(nodes[newX, newY], 1);
+					}
+
+					// connect node in right direction
+					if (x + 1 < nodes.GetLength(0) && maze.IsTileWalkable(currentPos + Vector2.right))
+					{
+						int newX = (int)currentPos.x + 1;
+						int newY = (int)currentPos.y;
+						currentNode.SetEdge(nodes[newX, newY], 1);
+					}
+				}
 			}
 		}
 	}
@@ -235,9 +259,9 @@ public abstract class GameMode : MonoBehaviour
 		if (agent.CompareTag("Player"))
 		{
 			MsPacMan pacMan = agent.GetComponent<MsPacMan>();
+			GetMazeGraphForAgent(pacMan.currentTile).data.ItemWasPickedUp();
 			OnPickup(pacMan, item);
 		}
-		// TODO add for all cases that item on Node of Vec2 of MsPacMan position is removed (change PickupType to NONE)
 	}
 
 	public void OnAgentCollision(Agent agent, Collision2D collision)

@@ -11,7 +11,7 @@ public class GameTile
     // these are not needed for the assignment?
     // protected bool hasGhost = false;
     // protected bool hasMsPacMan = false;
-    // TODO should be updated after item is picked up, need to keep checking pickupItemsEaten Dictionary in GameMode/SimpleGame, need to keep updating graph (performance?)
+
     protected PickupType pickupType;
 
 

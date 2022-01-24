@@ -9,12 +9,12 @@ using Graphs;
 public class GoalBasedAgent_MsPacMan : AgentController<MsPacMan>
 {
     private MsPacMan msPacMan;
-    // T T T
-    private Func<Node<KeyValuePair<Vector2, Tile>>> goalTestPellet;
-    private Func<Node<KeyValuePair<Vector2, Tile>>> goalTestGhost;
-    private Func<Node<KeyValuePair<Vector2, Tile>>> heuristic;
-    // T
-    private Node<KeyValuePair<Vector2, Tile>> mazeGraph;
+
+    private Func<Node<GameTile>, bool> goalTestPellet;
+    private Func<Node<GameTile>, bool> goalTestGhost;
+    private Func<Node<GameTile>, double> heuristic;
+
+    private Node<GameTile> mazeGraph;
 
     protected override void Awake()
     {

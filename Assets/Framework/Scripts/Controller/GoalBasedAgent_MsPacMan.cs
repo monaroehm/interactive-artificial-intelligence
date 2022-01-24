@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Graphs;
 
-// TODO define generic T (as maybe KeyValuePair of Vector2 and Tile)
 [RequireComponent(typeof(MsPacMan))]
 public class GoalBasedAgent_MsPacMan : AgentController<MsPacMan>
 {
@@ -33,7 +32,7 @@ public class GoalBasedAgent_MsPacMan : AgentController<MsPacMan>
     {
         // TODO GetMazeForAgent here
 
-        List<Node<KeyValuePair<Vector2, Tile>>> path;
+        List<Node<GameTile>> path;
 
         if (msPacMan.AreGhostsEdible())
         {

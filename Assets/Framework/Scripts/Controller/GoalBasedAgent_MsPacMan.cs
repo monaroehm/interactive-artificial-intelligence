@@ -49,6 +49,8 @@ public class GoalBasedAgent_MsPacMan : AgentController<MsPacMan>
     // TODO
     private void InstantiateFuncs()
     {
-        //this.goalTestPellet = new Func();
+        this.goalTestGhost = msPacMan.GoalTestGhost;
+        this.goalTestPellet = msPacMan.GoalTestPellet;
+        this.heuristic = msPacMan.GetDistanceToGhost;
     }
 }

@@ -25,5 +25,7 @@ public enum PickupType
 {
     PILL,
     CHERRY,
-    POWER_PELLET
+    POWER_PELLET,
+    // added none because enums cant be null
+    NONE
 }

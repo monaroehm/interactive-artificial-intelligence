@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Graphs;
 
 public abstract class GameMode : MonoBehaviour
 {
@@ -34,6 +35,8 @@ public abstract class GameMode : MonoBehaviour
 	protected Dictionary<GhostName, Ghost> ghosts = new Dictionary<GhostName, Ghost>();
 	protected Dictionary<GhostName, bool> ghostsEdible = new Dictionary<GhostName, bool>();
 
+	protected Node<GameTile>[,] nodes;
+
 	protected Dictionary<PickupType, List<PickupItem>> pickupItems = new Dictionary<PickupType, List<PickupItem>>();
 	protected Dictionary<PickupType, List<PickupItem>> pickupItemsEaten = new Dictionary<PickupType, List<PickupItem>>();
 
@@ -44,6 +47,8 @@ public abstract class GameMode : MonoBehaviour
 	{
 		GameData.Reset();
 		maze.LoadMaze(mazeFile);
+		this.nodes = maze.initialNodes;
+		// connect nodes
 	}
 
 	private void Start()
@@ -125,6 +130,37 @@ public abstract class GameMode : MonoBehaviour
 		Instantiate(junction, maze.junctionTwo, Quaternion.identity).GetComponent<Junction>().teleportationTarget = maze.junctionTwo - Vector2.right * 26;
 	}
 
+	private void ConnectNodes()
+	{
+		//iterate over array, connect all neighboring Nodes
+		for (int col = 0; col < nodes.GetLength(0); col++)
+		{
+			for (int row = 0; row < nodes.GetLength(1); row++)
+			{
+				if(nodes[row, col] != null)
+                {
+					Vector2 currentPos = new Vector2(col, row);
+					Node<GameTile> currentNode = nodes[col, row];
+
+					if (maze.IsTileWalkable(currentPos + Vector2.up))
+					{
+						int newX = (int)currentPos.x + 0;
+						int newY = (int)currentPos.y + 1;
+						currentNode.SetEdge(nodes[newX, newY], 1);
+					}
+					// TODO repeat for other directions
+					// out of bounds error
+                }
+			}
+		}
+	}
+
+	Node<GameTile> GetMazeGraphForAgent(Vector2 position_Agent)
+	{
+		Node<GameTile> startNode = nodes[(int)position_Agent.x, (int)position_Agent.y];
+		return startNode;
+    }
+
 	void ClearPickups()
 	{
 		foreach (PickupType type in pickupItems.Keys)
@@ -201,6 +237,7 @@ public abstract class GameMode : MonoBehaviour
 			MsPacMan pacMan = agent.GetComponent<MsPacMan>();
 			OnPickup(pacMan, item);
 		}
+		// TODO add for all cases that item on Node of Vec2 of MsPacMan position is removed (change PickupType to NONE)
 	}
 
 	public void OnAgentCollision(Agent agent, Collision2D collision)

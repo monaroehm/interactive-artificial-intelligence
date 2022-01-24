@@ -68,7 +68,7 @@ public class SimpleGame : GameMode
                 break;
         }
 
-        if(pickupItems[PickupType.PILL].Count == pickupItemsEaten[PickupType.PILL].Count){
+        if (pickupItems[PickupType.PILL].Count == pickupItemsEaten[PickupType.PILL].Count){
             GameData.level++;
             GameData.score += PointsPerLevel;
             ResetMaze();

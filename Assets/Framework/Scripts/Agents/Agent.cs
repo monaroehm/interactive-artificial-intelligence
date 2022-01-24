@@ -180,6 +180,4 @@ public abstract class Agent : MonoBehaviour
     {
         game.OnAgentCollision(this, collision);
     }
-
-
 }

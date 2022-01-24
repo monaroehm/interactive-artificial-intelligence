@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Graphs;
 
 /// <summary>
 /// Reads a Maze from a file, instantiates the walls, and provides positional information for ghosts, player start, and pickups.
@@ -35,6 +36,9 @@ public class Maze : MonoBehaviour
 
 	char[,] mazeData;
 	Tile[,] tiles;
+	// initial GameTile Array
+	// make Node<GameTile>[,]
+	public Node<GameTile>[,] initialNodes;
 
 	public double SniffTile(Vector2 tile)
 	{
@@ -172,6 +176,7 @@ public class Maze : MonoBehaviour
 	void ParseTileData()
 	{
 		tiles = new Tile[Width, Height];
+		initialNodes = new Node<GameTile>[Width, Height];
 		for (int y = 0; y < Height; y++)
 		{
 			for (int x = 0; x < Width; x++)
@@ -191,10 +196,12 @@ public class Maze : MonoBehaviour
 						break;
 					case 'p':
 						tiles[x, y] = new Tile(TileType.PLAYER_SPAWN);
+						initialNodes[x, y] = new Node<GameTile>(new GameTile(x, y, PickupType.NONE));
 						msPacManSpawn = new Vector2(x, y);
 						break;
 					case '.':
 						tiles[x, y] = new Tile(TileType.PILL);
+						initialNodes[x, y] = new Node<GameTile>(new GameTile(x, y, PickupType.PILL));
 
 						if (!pickupItems.ContainsKey(PickupType.PILL))
 							pickupItems[PickupType.PILL] = new List<Vector2>();
@@ -203,6 +210,7 @@ public class Maze : MonoBehaviour
 						break;
 					case '*':
 						tiles[x, y] = new Tile(TileType.POWER_PELLET);
+						initialNodes[x, y] = new Node<GameTile>(new GameTile(x, y, PickupType.POWER_PELLET));
 
 						if (!pickupItems.ContainsKey(PickupType.POWER_PELLET))
 							pickupItems[PickupType.POWER_PELLET] = new List<Vector2>();
@@ -211,14 +219,17 @@ public class Maze : MonoBehaviour
 						break;
 					case 'g':
 						tiles[x, y] = new Tile(TileType.GHOST_SPAWN);
+						initialNodes[x, y] = new Node<GameTile>(new GameTile(x, y, PickupType.NONE));
 						ghostSpawn = new Vector2(x, y);
 						break;
 					case 'l':
 						tiles[x, y] = new Tile(TileType.NONE);
+						initialNodes[x, y] = new Node<GameTile>(new GameTile(x, y, PickupType.NONE));
 						lair = new Vector2(x, y);
 						break;
 					default:
 						tiles[x, y] = new Tile(TileType.NONE);
+						initialNodes[x, y] = new Node<GameTile>(new GameTile(x, y, PickupType.NONE));
 						break;
 				}
 			}

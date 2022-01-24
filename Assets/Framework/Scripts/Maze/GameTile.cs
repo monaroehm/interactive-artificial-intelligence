@@ -6,13 +6,13 @@ using UnityEngine;
 // GameTiles are thus supposed to be walkable by default
 public class GameTile
 {
-    public Vector2 coordinates {get; protected set;}
+    protected Vector2 coordinates;
 
     // these are not needed for the assignment?
     // protected bool hasGhost = false;
     // protected bool hasMsPacMan = false;
 
-    public PickupType pickupType {get; protected set;}
+    protected PickupType pickupType;
 
 
     public GameTile(Vector2 coordinates, PickupType pickupType)

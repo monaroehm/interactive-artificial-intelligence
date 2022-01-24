@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using Graphs;
 
 /// <summary>
 /// Defines the basis for a functional entity, including movement and event generation in the maze.
@@ -181,12 +182,12 @@ public abstract class Agent : MonoBehaviour
         game.OnAgentCollision(this, collision);
     }
 
-    bool GoalTestPellet(Node<GameTile> node)
+    public bool GoalTestPellet(Node<GameTile> node)
 	{
 		return node.data.pickupType == PickupType.PILL;
 	}
 
-	bool GoalTestGhost(Node<GameTile> node)
+	public bool GoalTestGhost(Node<GameTile> node)
 	{
 		foreach(GhostName ghostName in Enum.GetValues(typeof(GhostName)))
 		{
@@ -198,13 +199,13 @@ public abstract class Agent : MonoBehaviour
 		return false;
 	}
 
-	double GetDistanceToGhost(Node<GameTile> node)
+	public double GetDistanceToGhost(Node<GameTile> node)
 	{
 		double lowestDistance = 0.0;
 		foreach(GhostName ghostName in Enum.GetValues(typeof(GhostName)))
 		{
             Ghost ghost = game.GetGhost(ghostName);
-			double distance = (ghost.currentTile - node.data.coordinates).Distance();
+			double distance = Vector2.Distance(ghost.currentTile, node.data.coordinates);
 			if(distance < lowestDistance)
 				lowestDistance = distance;
 		}

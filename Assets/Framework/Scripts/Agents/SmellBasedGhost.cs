@@ -58,8 +58,6 @@ public class SmellBasedGhost : AgentController<Ghost>
             agent.Move(DirectionExtensions.Random());
         else
             agent.Move(currentBestDirection);
-
-        Debug.Log(agent.id + ": " + currentBestSmell);
     }
 
     public override void OnTileReached()

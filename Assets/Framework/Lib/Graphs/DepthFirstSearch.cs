@@ -33,7 +33,7 @@ namespace Graphs
                     foreach (Node<T> child in current.Neighbors)
                     {
                         frontier.Push(child);
-                        if (!cameFrom.ContainsKey(child))
+                        if (!discovered.Contains(child))
                         {
                             cameFrom.Add(child, current);
                         }

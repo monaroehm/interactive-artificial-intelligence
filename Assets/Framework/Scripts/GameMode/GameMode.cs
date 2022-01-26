@@ -259,7 +259,7 @@ public abstract class GameMode : MonoBehaviour
 		if (agent.CompareTag("Player"))
 		{
 			MsPacMan pacMan = agent.GetComponent<MsPacMan>();
-			GetMazeGraphForAgent(pacMan.currentTile).data.ItemWasPickedUp();
+			GetMazeGraphForAgent(pacMan.currentTile + pacMan.currentMove.ToVector2()).data.ItemWasPickedUp();
 			OnPickup(pacMan, item);
 		}
 	}

@@ -19,7 +19,6 @@ namespace Graphs
             Dictionary<Node<T>, double> gScores = new Dictionary<Node<T>, double>();
             frontier.Add(startNode, heuristic(startNode));
             gScores.Add(startNode, 0);
-            // need fScore map?
 
             while (frontier.Count > 0)
             {

@@ -150,7 +150,15 @@ public abstract class GameMode : MonoBehaviour
 						int newY = (int)currentPos.y + 1;
 						currentNode.SetEdge(nodes[newX, newY], 1);
 					}
-
+					
+					// connect node in right direction
+					if (x + 1 < nodes.GetLength(0) && maze.IsTileWalkable(currentPos + Vector2.right))
+					{
+						int newX = (int)currentPos.x + 1;
+						int newY = (int)currentPos.y;
+						currentNode.SetEdge(nodes[newX, newY], 1);
+					}
+					
 					// connect node in down direction
 					if (y - 1 >= 0 && maze.IsTileWalkable(currentPos + Vector2.down))
 					{
@@ -166,15 +174,7 @@ public abstract class GameMode : MonoBehaviour
 						int newY = (int)currentPos.y;
 						currentNode.SetEdge(nodes[newX, newY], 1);
 					}
-
-					// connect node in right direction
-					if (x + 1 < nodes.GetLength(0) && maze.IsTileWalkable(currentPos + Vector2.right))
-					{
-						int newX = (int)currentPos.x + 1;
-						int newY = (int)currentPos.y;
-						currentNode.SetEdge(nodes[newX, newY], 1);
-					}
-				}
+                }
 			}
 		}
 	}
@@ -259,7 +259,9 @@ public abstract class GameMode : MonoBehaviour
 		if (agent.CompareTag("Player"))
 		{
 			MsPacMan pacMan = agent.GetComponent<MsPacMan>();
-			GetMazeGraphForAgent(pacMan.currentTile + pacMan.currentMove.ToVector2()).data.ItemWasPickedUp();
+			//Debug.Log(item.transform.position);
+			//GetMazeGraphForAgent(pacMan.currentTile + pacMan.currentMove.ToVector2()).data.ItemWasPickedUp();
+			GetMazeGraphForAgent(new Vector2(item.transform.position.x, item.transform.position.y)).data.ItemWasPickedUp();
 			OnPickup(pacMan, item);
 		}
 	}

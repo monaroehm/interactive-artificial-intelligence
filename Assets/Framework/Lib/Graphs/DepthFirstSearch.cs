@@ -35,7 +35,8 @@ namespace Graphs
                         frontier.Push(child);
                         if (!discovered.Contains(child))
                         {
-                            cameFrom.Add(child, current);
+                            //cameFrom.Add(child, current);
+                            cameFrom[child] = current;
                         }
                     }
                 }

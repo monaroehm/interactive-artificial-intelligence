@@ -12,7 +12,7 @@ public class GoalBasedAgent_MsPacMan : AgentController<MsPacMan>
     private Func<Node<GameTile>, bool> goalTestPellet;
     private Func<Node<GameTile>, bool> goalTestGhost;
     private Func<Node<GameTile>, double> heuristic;
-    
+
     private List<Node<GameTile>> path = new List<Node<GameTile>>();
 
     protected override void Awake()
@@ -24,7 +24,6 @@ public class GoalBasedAgent_MsPacMan : AgentController<MsPacMan>
 
     public override void OnDecisionRequired()
     {
-        
     }
 
     public override void OnTileReached()
@@ -36,6 +35,8 @@ public class GoalBasedAgent_MsPacMan : AgentController<MsPacMan>
         {
             path.Clear();
             AStar.Search(mazeGraph, heuristic, goalTestGhost, out path, out cost);
+            // delete the start tile
+            path.RemoveAt(path.Count - 1);
         }
         else
         {
@@ -43,13 +44,10 @@ public class GoalBasedAgent_MsPacMan : AgentController<MsPacMan>
             {
                 DepthFirstSearch.Search(mazeGraph, goalTestPellet, out path);
                 // delete the start tile
-                path.RemoveAt(path.Count-1);
-            }
-            else
-            {
-                TranslatePathIntoMove(path);
+                path.RemoveAt(path.Count - 1);
             }
         }
+        TranslatePathIntoMove(path);
     }
 
     // TODO
@@ -63,18 +61,18 @@ public class GoalBasedAgent_MsPacMan : AgentController<MsPacMan>
     void TranslatePathIntoMove(List<Node<GameTile>> currentPath)
     {
         // pos 0 would be goal
-        Node<GameTile> nextNode = currentPath[currentPath.Count-1];
+        Node<GameTile> nextNode = currentPath[currentPath.Count - 1];
         currentPath.Remove(nextNode);
         GameTile nextTile = nextNode.data;
-       
+
         Vector2 moveDirection = nextTile.coordinates - msPacMan.currentTile;
 
         if (moveDirection.Equals(Vector2.up))
         {
             msPacMan.Move(Direction.UP);
         }
-        else if (moveDirection.Equals(Vector2.down)) 
-        { 
+        else if (moveDirection.Equals(Vector2.down))
+        {
             msPacMan.Move(Direction.DOWN);
         }
         else if (moveDirection.Equals(Vector2.left))
@@ -87,7 +85,9 @@ public class GoalBasedAgent_MsPacMan : AgentController<MsPacMan>
         }
         else
         {
-            throw new Exception("Search returned diagonal movement!");
+            // MsPacMan has died, updated currentTile but not planned path so just reset path:
+            currentPath.Clear();
+            //throw new Exception("Search returned diagonal movement!");
         }
     }
 }

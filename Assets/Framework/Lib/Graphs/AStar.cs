@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace Graphs
 {
@@ -9,7 +11,6 @@ namespace Graphs
         {
             path = new List<Node<T>>();
             cost = double.PositiveInfinity;
-            //cost = float.PositiveInfinity;
 
             // saves the parent node of a node, needed to construct the cheapest/fastest way to goal
             Dictionary<Node<T>, Node<T>> cameFrom = new Dictionary<Node<T>, Node<T>>();
@@ -27,7 +28,7 @@ namespace Graphs
                 // find cheapest node
                 foreach(KeyValuePair<Node<T>, double> entry in frontier)
                 {
-                    // can also use Equals(default(KeyValuePair<Node<T>, double>)
+                    // also compare with empty KeyValuePair because KeyValuePair cannot be null
                     if (current.Equals(new KeyValuePair<Node<T>, double>()) || entry.Value < current.Value)
                     {
                         current = entry;
@@ -43,24 +44,39 @@ namespace Graphs
 
                 foreach (KeyValuePair<Node<T>, double> neighbor in current.Key.Edges)
                 {
-                    double gScore = double.PositiveInfinity;
-                    if(!gScores.TryGetValue(current.Key, out gScore))
-                    {
-                        throw new Exception("Node does not have a gScore: " + current.Key);
-                    }
-                    double tentative_gScore = gScore + neighbor.Value;
+                    // 1 == basic Edge weight
+                    double tentative_gScore = gScores[current.Key] + 1;
 
-                    double gScoreNeighbor = double.PositiveInfinity;
-                    gScores.TryGetValue(neighbor.Key, out gScoreNeighbor);
+                    double gScoreNeighbor;
+                    if (!gScores.TryGetValue(neighbor.Key, out gScoreNeighbor))
+                    {
+                        gScoreNeighbor = double.PositiveInfinity;
+                        gScores.Add(neighbor.Key, gScoreNeighbor);
+                    }
+                    
                     if (tentative_gScore < gScoreNeighbor)
                     {
-                        cameFrom.Add(current.Key, neighbor.Key);
-                        gScores.Add(neighbor.Key, gScoreNeighbor);
+                        cameFrom[neighbor.Key] = current.Key;
+                        /*
+                        if (!cameFrom.ContainsKey(neighbor.Key))
+                        {
+                            cameFrom.Add(neighbor.Key, current.Key);
+                        }
+
+                        if (!gScores.ContainsKey(neighbor.Key))
+                        {
+                            //cameFrom.Add(neighbor.Key, current.Key);
+                            gScores.Add(neighbor.Key, tentative_gScore);
+                        }
+                        */
+                        gScores[neighbor.Key] = tentative_gScore;
+                        
                         // need fScore map?
                         if (!frontier.ContainsKey(neighbor.Key))
                         {
+                            Debug.Log("heuristic value: "+heuristic(neighbor.Key));
                             // Add(node, f score = g score + h score)
-                            frontier.Add(neighbor.Key, gScoreNeighbor + heuristic(neighbor.Key));
+                            frontier.Add(neighbor.Key, tentative_gScore + heuristic(neighbor.Key));
                         }
                     }
                 }
@@ -78,8 +94,8 @@ namespace Graphs
             {
                 current = cameFrom[current];
                 totalPath.Add(current);
-                // not sure if correct
-                cost += current.Edges[cameFrom[current]];
+                // TODO CHANGE, INCORRECT
+                //cost += current.Edges[cameFrom[current]];
             }
             
             return totalPath;

@@ -206,7 +206,7 @@ public abstract class Agent : MonoBehaviour
 		{
             Ghost ghost = game.GetGhost(ghostName);
 			double distance = Vector2.Distance(ghost.currentTile, node.data.coordinates);
-			if(distance < lowestDistance)
+			if(distance < lowestDistance || lowestDistance == 0)
 				lowestDistance = distance;
 		}
 

@@ -27,7 +27,7 @@ public abstract class Agent : MonoBehaviour
         private set;
     }
 
-    protected GameMode game
+    public GameMode game
     {
         get;
         private set;

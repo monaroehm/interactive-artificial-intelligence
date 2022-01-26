@@ -5,23 +5,25 @@ namespace Graphs
 {
     public static class DepthFirstSearch
     {
-
         public static bool Search<T>(Node<T> startNode,
-                                     Func<Node<T>, bool> goalTest,
-                                     out List<Node<T>> path)
+            Func<Node<T>, bool> goalTest,
+            out List<Node<T>> path)
         {
             path = new List<Node<T>>();
             // saves the parent node of a node, needed to construct the cheapest/fastest way to goal
             Dictionary<Node<T>, Node<T>> cameFrom = new Dictionary<Node<T>, Node<T>>();
             // LIFO
             Stack<Node<T>> frontier = new Stack<Node<T>>();
+            List<Node<T>> discovered = new List<Node<T>>();
             frontier.Push(startNode);
 
-            while (frontier.Count > 0)
+            while (frontier.Count > 0 )
             {
                 Node<T> current = frontier.Pop();
-                if (!cameFrom.ContainsKey(current))
+                //if (!cameFrom.ContainsValue(current))
+                if (!discovered.Contains(current))
                 {
+                    discovered.Add(current);
                     if (goalTest(current))
                     {
                         path = ReconstructPath(cameFrom, current);
@@ -31,7 +33,10 @@ namespace Graphs
                     foreach (Node<T> child in current.Neighbors)
                     {
                         frontier.Push(child);
-                        cameFrom.Add(child, current);
+                        if (!cameFrom.ContainsKey(child))
+                        {
+                            cameFrom.Add(child, current);
+                        }
                     }
                 }
             }
@@ -48,6 +53,7 @@ namespace Graphs
                 current = cameFrom[current];
                 totalPath.Add(current);
             }
+
             return totalPath;
         }
     }

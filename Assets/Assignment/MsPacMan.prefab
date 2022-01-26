@@ -16,9 +16,9 @@ GameObject:
   - component: {fileID: 58676583265195568}
   - component: {fileID: 114076073189175338}
   - component: {fileID: 114077046948897832}
-  - component: {fileID: 114562775806662010}
   - component: {fileID: 6191506756980623832}
   - component: {fileID: -3803155009439882504}
+  - component: {fileID: 1914751662927533956}
   m_Layer: 8
   m_Name: MsPacMan
   m_TagString: Player
@@ -184,18 +184,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d332dfcd09bc64b6fbf8e50664766953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114562775806662010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1840231973913816}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d49639e4e19ae4e35a29dd87a1433814, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6191506756980623832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,5 +206,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d5fc72da65f1cc44a484d138680778d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1914751662927533956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840231973913816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0cfc7aad0b95d4f9d5c7af80ad098b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

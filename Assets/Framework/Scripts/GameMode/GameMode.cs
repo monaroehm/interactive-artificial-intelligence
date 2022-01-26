@@ -179,7 +179,7 @@ public abstract class GameMode : MonoBehaviour
 		}
 	}
 
-	Node<GameTile> GetMazeGraphForAgent(Vector2 position_Agent)
+	public Node<GameTile> GetMazeGraphForAgent(Vector2 position_Agent)
 	{
 		Node<GameTile> startNode = nodes[(int)position_Agent.x, (int)position_Agent.y];
 		return startNode;

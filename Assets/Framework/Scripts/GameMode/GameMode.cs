@@ -49,7 +49,6 @@ public abstract class GameMode : MonoBehaviour
 		GameData.Reset();
 		maze.LoadMaze(mazeFile);
 		this.nodes = maze.GetInitialNodesDeepCopy();
-		ConnectNodes();
 	}
 
 	private void Start()
@@ -80,7 +79,6 @@ public abstract class GameMode : MonoBehaviour
 	protected void ResetNodes()
 	{
 		this.nodes = maze.GetInitialNodesDeepCopy();
-		ConnectNodes();
 	}
 
 	void InstantiatePlayer()
@@ -135,56 +133,6 @@ public abstract class GameMode : MonoBehaviour
 	{
 		Instantiate(junction, maze.junctionOne, Quaternion.identity).GetComponent<Junction>().teleportationTarget = maze.junctionOne + Vector2.right * 26;
 		Instantiate(junction, maze.junctionTwo, Quaternion.identity).GetComponent<Junction>().teleportationTarget = maze.junctionTwo - Vector2.right * 26;
-	}
-
-	//iterate over array, connect all neighboring Nodes
-	private void ConnectNodes()
-	{
-		// columns
-		for (int y = 0; y < nodes.GetLength(1); y++)
-		{
-			// rows
-			for (int x = 0; x < nodes.GetLength(0); x++)
-			{
-				if(nodes[x, y] != null)
-                {
-					Vector2 currentPos = new Vector2(x, y);
-					Node<GameTile> currentNode = nodes[x, y];
-
-					// connect node in up direction
-					if (y + 1 < nodes.GetLength(1) && maze.IsTileWalkable(currentPos + Vector2.up))
-					{
-						int newX = (int)currentPos.x;
-						int newY = (int)currentPos.y + 1;
-						currentNode.SetEdge(nodes[newX, newY], 1);
-					}
-					
-					// connect node in right direction
-					if (x + 1 < nodes.GetLength(0) && maze.IsTileWalkable(currentPos + Vector2.right))
-					{
-						int newX = (int)currentPos.x + 1;
-						int newY = (int)currentPos.y;
-						currentNode.SetEdge(nodes[newX, newY], 1);
-					}
-					
-					// connect node in down direction
-					if (y - 1 >= 0 && maze.IsTileWalkable(currentPos + Vector2.down))
-					{
-						int newX = (int)currentPos.x;
-						int newY = (int)currentPos.y - 1;
-						currentNode.SetEdge(nodes[newX, newY], 1);
-					}
-
-					// connect node in left direction
-					if (x - 1 >= 0 && maze.IsTileWalkable(currentPos + Vector2.left))
-					{
-						int newX = (int)currentPos.x - 1;
-						int newY = (int)currentPos.y;
-						currentNode.SetEdge(nodes[newX, newY], 1);
-					}
-                }
-			}
-		}
 	}
 
 	public Node<GameTile> GetMazeGraphForAgent(Vector2 positionOfAgent)

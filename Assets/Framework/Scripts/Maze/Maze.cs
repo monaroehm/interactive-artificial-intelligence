@@ -236,6 +236,56 @@ public class Maze : MonoBehaviour
 			}
 		}
 	}
+	
+	//iterate over array, connect all neighboring Nodes
+	private void ConnectNodes(Node<GameTile>[,] nodes)
+	{
+		// columns
+		for (int y = 0; y < nodes.GetLength(1); y++)
+		{
+			// rows
+			for (int x = 0; x < nodes.GetLength(0); x++)
+			{
+				if(nodes[x, y] != null)
+				{
+					Vector2 currentPos = new Vector2(x, y);
+					Node<GameTile> currentNode = nodes[x, y];
+
+					// connect node in up direction
+					if (y + 1 < nodes.GetLength(1) && IsTileWalkable(currentPos + Vector2.up))
+					{
+						int newX = (int)currentPos.x;
+						int newY = (int)currentPos.y + 1;
+						currentNode.SetEdge(nodes[newX, newY], 1);
+					}
+					
+					// connect node in right direction
+					if (x + 1 < nodes.GetLength(0) && IsTileWalkable(currentPos + Vector2.right))
+					{
+						int newX = (int)currentPos.x + 1;
+						int newY = (int)currentPos.y;
+						currentNode.SetEdge(nodes[newX, newY], 1);
+					}
+					
+					// connect node in down direction
+					if (y - 1 >= 0 && IsTileWalkable(currentPos + Vector2.down))
+					{
+						int newX = (int)currentPos.x;
+						int newY = (int)currentPos.y - 1;
+						currentNode.SetEdge(nodes[newX, newY], 1);
+					}
+
+					// connect node in left direction
+					if (x - 1 >= 0 && IsTileWalkable(currentPos + Vector2.left))
+					{
+						int newX = (int)currentPos.x - 1;
+						int newY = (int)currentPos.y;
+						currentNode.SetEdge(nodes[newX, newY], 1);
+					}
+				}
+			}
+		}
+	}
 
 	void SpawnWalls()
 	{
@@ -276,6 +326,7 @@ public class Maze : MonoBehaviour
 				deepCopy[x, y] = new Node<GameTile>(new GameTile(vector2, originalGameTile.pickupType));
 			}
 		}
+		ConnectNodes(deepCopy);
 		return deepCopy;
 	}
 }

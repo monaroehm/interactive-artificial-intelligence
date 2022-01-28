@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Graphs;
@@ -47,7 +48,7 @@ public abstract class GameMode : MonoBehaviour
 	{
 		GameData.Reset();
 		maze.LoadMaze(mazeFile);
-		this.nodes = maze.initialNodes;
+		this.nodes = maze.GetInitialNodesDeepCopy();
 		ConnectNodes();
 	}
 
@@ -72,7 +73,14 @@ public abstract class GameMode : MonoBehaviour
 		ResetPickups();
 		ResetGhosts();
 		ResetPacMan();
+		ResetNodes();
 		maze.ResetSmell();
+	}
+
+	protected void ResetNodes()
+	{
+		this.nodes = maze.GetInitialNodesDeepCopy();
+		ConnectNodes();
 	}
 
 	void InstantiatePlayer()
@@ -179,9 +187,9 @@ public abstract class GameMode : MonoBehaviour
 		}
 	}
 
-	public Node<GameTile> GetMazeGraphForAgent(Vector2 position_Agent)
+	public Node<GameTile> GetMazeGraphForAgent(Vector2 positionOfAgent)
 	{
-		Node<GameTile> startNode = nodes[(int)position_Agent.x, (int)position_Agent.y];
+		Node<GameTile> startNode = nodes[(int)positionOfAgent.x, (int)positionOfAgent.y];
 		return startNode;
     }
 
@@ -259,9 +267,7 @@ public abstract class GameMode : MonoBehaviour
 		if (agent.CompareTag("Player"))
 		{
 			MsPacMan pacMan = agent.GetComponent<MsPacMan>();
-			//Debug.Log(item.transform.position);
-			//GetMazeGraphForAgent(pacMan.currentTile + pacMan.currentMove.ToVector2()).data.ItemWasPickedUp();
-			GetMazeGraphForAgent(new Vector2(item.transform.position.x, item.transform.position.y)).data.ItemWasPickedUp();
+			GetMazeGraphForAgent(pacMan.currentTile + pacMan.currentMove.ToVector2()).data.ItemWasPickedUp();
 			OnPickup(pacMan, item);
 		}
 	}
@@ -320,9 +326,9 @@ public abstract class GameMode : MonoBehaviour
 		return player;
 	}
 
-	public Ghost GetGhost(GhostName name)
+	public Ghost GetGhost(GhostName ghostName)
 	{
-		return ghosts[name];
+		return ghosts[ghostName];
 	}
 
 	public List<PickupItem> GetPickups(PickupType type)

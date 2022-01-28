@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 using Graphs;
 
@@ -208,7 +206,6 @@ public abstract class Agent : MonoBehaviour
             double distance = Vector2.Distance(ghost.currentTile, node.data.coordinates);
             if(distance < lowestDistance || lowestDistance <= -1.0)
 				lowestDistance = distance;
-            Debug.Log(ghostName+": distance "+distance);
 		}
 
 		return lowestDistance;

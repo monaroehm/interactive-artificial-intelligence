@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Graphs;
+using UnityEditor.Experimental.GraphView;
 
 /// <summary>
 /// Reads a Maze from a file, instantiates the walls, and provides positional information for ghosts, player start, and pickups.
@@ -256,5 +257,25 @@ public class Maze : MonoBehaviour
 		{
 			Destroy(go.transform.GetChild(i));
 		}
+	}
+
+	public Node<GameTile>[,] GetInitialNodesDeepCopy()
+	{
+		Node<GameTile>[,] deepCopy = new Node<GameTile>[Width, Height];;
+		for (int y = 0; y < initialNodes.GetLength(1); y++)
+		{
+			// rows
+			for (int x = 0; x < initialNodes.GetLength(0); x++)
+			{
+				if (this.initialNodes[x, y] == null)
+				{
+					continue;
+				}
+				GameTile originalGameTile = initialNodes[x, y].data;
+				Vector2 vector2 = new Vector2(originalGameTile.coordinates.x, originalGameTile.coordinates.y);
+				deepCopy[x, y] = new Node<GameTile>(new GameTile(vector2, originalGameTile.pickupType));
+			}
+		}
+		return deepCopy;
 	}
 }

@@ -33,9 +33,7 @@ public class GoalBasedAgent_MsPacMan : AgentController<MsPacMan>
 
         if (msPacMan.AreGhostsEdible())
         {
-            //path.Clear();
             AStar.Search(mazeGraph, heuristic, goalTestGhost, out path, out cost);
-            //DepthFirstSearch.Search(mazeGraph, goalTestPellet, out path);
             // delete the start tile
             path.RemoveAt(path.Count - 1);
         }
@@ -43,7 +41,7 @@ public class GoalBasedAgent_MsPacMan : AgentController<MsPacMan>
         {
             if (path.Count <= 0)
             {
-                DepthFirstSearch.Search(mazeGraph, goalTestPellet, out path);
+                BreadthFirstSearch.Search(mazeGraph, goalTestPellet, out path);
                 // delete the start tile
                 path.RemoveAt(path.Count - 1);
             }
@@ -54,8 +52,7 @@ public class GoalBasedAgent_MsPacMan : AgentController<MsPacMan>
             path.Clear();
         }
     }
-
-    // TODO
+    
     private void InstantiateFuncs()
     {
         this.goalTestGhost = msPacMan.GoalTestGhost;
@@ -65,7 +62,7 @@ public class GoalBasedAgent_MsPacMan : AgentController<MsPacMan>
 
     void TranslatePathIntoMove(List<Node<GameTile>> currentPath)
     {
-        // pos 0 would be goal
+        // pos 0 is goal, work towards goal
         Node<GameTile> nextNode = currentPath[currentPath.Count - 1];
         currentPath.Remove(nextNode);
         GameTile nextTile = nextNode.data;
@@ -90,9 +87,8 @@ public class GoalBasedAgent_MsPacMan : AgentController<MsPacMan>
         }
         else
         {
-            // MsPacMan has died, updated currentTile but not planned path so just reset path:
-            currentPath.Clear();
-            //throw new Exception("Search returned diagonal movement!");
+            // MsPacMan has died, updated currentTile but not planned path so just reset path to recalculate with updated information
+            this.path.Clear();
         }
     }
 }

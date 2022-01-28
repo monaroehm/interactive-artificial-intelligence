@@ -42,42 +42,23 @@ namespace Graphs
                     return true;
                 }
 
-                foreach (KeyValuePair<Node<T>, double> neighbor in current.Key.Edges)
+                foreach (KeyValuePair<Node<T>, double> child in current.Key.Edges)
                 {
                     // 1 == basic Edge weight
                     double tentative_gScore = gScores[current.Key] + 1;
 
                     double gScoreNeighbor;
-                    if (!gScores.TryGetValue(neighbor.Key, out gScoreNeighbor))
+                    if (!gScores.TryGetValue(child.Key, out gScoreNeighbor))
                     {
                         gScoreNeighbor = double.PositiveInfinity;
-                        gScores.Add(neighbor.Key, gScoreNeighbor);
+                        gScores.Add(child.Key, gScoreNeighbor);
                     }
                     
                     if (tentative_gScore < gScoreNeighbor)
                     {
-                        cameFrom[neighbor.Key] = current.Key;
-                        /*
-                        if (!cameFrom.ContainsKey(neighbor.Key))
-                        {
-                            cameFrom.Add(neighbor.Key, current.Key);
-                        }
-
-                        if (!gScores.ContainsKey(neighbor.Key))
-                        {
-                            //cameFrom.Add(neighbor.Key, current.Key);
-                            gScores.Add(neighbor.Key, tentative_gScore);
-                        }
-                        */
-                        gScores[neighbor.Key] = tentative_gScore;
-                        
-                        // need fScore map?
-                        if (!frontier.ContainsKey(neighbor.Key))
-                        {
-                            Debug.Log("heuristic value: "+heuristic(neighbor.Key));
-                            // Add(node, f score = g score + h score)
-                            frontier.Add(neighbor.Key, tentative_gScore + heuristic(neighbor.Key));
-                        }
+                        cameFrom[child.Key] = current.Key;
+                        gScores[child.Key] = tentative_gScore;
+                        frontier[child.Key] = tentative_gScore + heuristic(child.Key);
                     }
                 }
             }
@@ -90,12 +71,14 @@ namespace Graphs
             cost = 0;
             List<Node<T>> totalPath = new List<Node<T>>();
             totalPath.Add(current);
+            
+            // finds all parents
             while (cameFrom.ContainsKey(current))
             {
+                // get cost of edge from parent node
+                cost += cameFrom[current].Edges[current];
                 current = cameFrom[current];
                 totalPath.Add(current);
-                // TODO CHANGE, INCORRECT
-                //cost += current.Edges[cameFrom[current]];
             }
             
             return totalPath;

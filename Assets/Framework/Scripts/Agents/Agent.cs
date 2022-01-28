@@ -201,13 +201,14 @@ public abstract class Agent : MonoBehaviour
 
 	public double GetDistanceToGhost(Node<GameTile> node)
 	{
-		double lowestDistance = 0.0;
+		double lowestDistance = -1.0;
 		foreach(GhostName ghostName in Enum.GetValues(typeof(GhostName)))
 		{
             Ghost ghost = game.GetGhost(ghostName);
-			double distance = Vector2.Distance(ghost.currentTile, node.data.coordinates);
-			if(distance < lowestDistance || lowestDistance == 0)
+            double distance = Vector2.Distance(ghost.currentTile, node.data.coordinates);
+            if(distance < lowestDistance || lowestDistance <= -1.0)
 				lowestDistance = distance;
+            Debug.Log(ghostName+": distance "+distance);
 		}
 
 		return lowestDistance;

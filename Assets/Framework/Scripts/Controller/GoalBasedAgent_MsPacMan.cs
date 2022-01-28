@@ -33,8 +33,9 @@ public class GoalBasedAgent_MsPacMan : AgentController<MsPacMan>
 
         if (msPacMan.AreGhostsEdible())
         {
-            path.Clear();
+            //path.Clear();
             AStar.Search(mazeGraph, heuristic, goalTestGhost, out path, out cost);
+            //DepthFirstSearch.Search(mazeGraph, goalTestPellet, out path);
             // delete the start tile
             path.RemoveAt(path.Count - 1);
         }
@@ -48,6 +49,10 @@ public class GoalBasedAgent_MsPacMan : AgentController<MsPacMan>
             }
         }
         TranslatePathIntoMove(path);
+        if (msPacMan.AreGhostsEdible())
+        {
+            path.Clear();
+        }
     }
 
     // TODO

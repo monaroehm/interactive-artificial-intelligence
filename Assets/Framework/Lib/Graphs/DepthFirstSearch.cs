@@ -20,7 +20,6 @@ namespace Graphs
             while (frontier.Count > 0 )
             {
                 Node<T> current = frontier.Pop();
-                //if (!cameFrom.ContainsValue(current))
                 if (!discovered.Contains(current))
                 {
                     discovered.Add(current);
@@ -35,7 +34,6 @@ namespace Graphs
                         frontier.Push(child);
                         if (!discovered.Contains(child))
                         {
-                            //cameFrom.Add(child, current);
                             cameFrom[child] = current;
                         }
                     }
